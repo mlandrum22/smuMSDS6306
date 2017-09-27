@@ -1,0 +1,72 @@
+---
+title: "MLandrum_Live_Session_4"
+author: "Michael Landrum"
+date: "9/23/2017"
+output: html_document
+---
+
+# 1
+
+You will need to install the fivethirtyeight package to run this script. After doing so, use that library to find all the data sets. I manually counted until the 18th data set which was named "college_recent_grads". Using vignette, I was able to track down the URL that had the article this information was used in.
+
+The dimensions of the df are 173 x 21, and the column names are displayed below.
+
+```{r FiveThirtyEight Data, echo=TRUE}
+#install.packages("fivethirtyeight")
+library(fivethirtyeight)
+df <- college_recent_grads
+
+# vignette("fivethirtyeight", package = "fivethirtyeight")
+# http://fivethirtyeight.com/features/the-economic-guide-to-picking-a-college-major/
+
+dim(df)
+colnames(df)
+```
+
+# 2
+
+We are told to print the column names again, so I did, and we can see that it is confirmed there are 21 columns.
+
+I'm sure there was a quicker way to finding the frequency of each category but I wanted to practice making loops. I created two empty vectors, one a character vector and one numeric. I iterated through each string in df$major_category and checked to see if it was already in the major vector. If it was, I added to the count of that major. If it was not, I created a new element in the major vector, and set the count to 1.
+
+I used sum(count) to make sure it had 173 like our original data frame.
+
+``` {r Data Summary a-b, echo=TRUE}
+#colnames(df)
+ncol(df)
+
+major <- character()
+count <- numeric()
+for(i in df$major_category){
+  if( i %in% major ){
+    x <- match(i, major)
+    count[x] <- count[x] + 1
+  } else{
+    y <- length(major) + 1
+    major[y] <- i
+    count[y] <- 1
+  }
+}
+
+major_count <- data.frame( major, count )
+major_count
+#sum(count)
+
+```
+
+A bar plot of the data is shown below. I removed the x-label due to it covering some of the majors. But you can unhide the comment to include it.
+
+If you'd like to have a csv of this data, uncomment the final line.
+
+``` {r Data Summary c-d, echo=TRUE}
+par(las=2)
+barplot(height = major_count$count, names.arg = major_count$major,
+        main = "The Economic Guide to Picking a College Major",
+        col = 2, ylab = "Frequency", 
+        #xlab = "College Majors"
+        )
+
+#write.csv(major_count, file = "major_count.csv", row.names=FALSE)
+```
+
+3. My github repo can be found at https://github.com/mlandrum22/smuMSDS6306.git 
