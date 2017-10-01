@@ -1,0 +1,129 @@
+---
+title: "MLandrum_Live_Session_5"
+author: "Michael Landrum"
+date: "10/1/2017"
+output: html_document
+---
+
+## 1
+
+We were given 2 CSVs with columns of children's first names, a gender, and the amount of children given that name. One CSV was from 2015 and the other was from 2016. We were told one of the names in 2016 was mispelled and thus created a duplicate.
+
+The 2016 file was separated by ";" whereas the 2015 file was separated by ",". First, we'll open up and display a little information about 2016.
+
+
+```{r Data Munging a-b, echo=TRUE}
+
+setwd("/Users/michaerl/Downloads/HW_Unit5_2")
+df2016 <- read.table("yob2016.txt", sep=";", header=FALSE)
+y2015 <- read.table("yob2015.txt", sep=",", header=FALSE)
+colnames(df2016) <- c("Name","Gender","Count")
+colnames(y2015) <- c("Name","Gender","Count")
+
+summary(df2016)
+str(df2016)
+
+```
+
+We were told that the mispelled name ended with 3 y's, so we'll use regular explressions to find a name that ends with 3 y's. 
+
+``` {r Data Munging c, echo=TRUE}
+
+df2016[grep("yyy",df2016$Name),]
+
+```
+
+The name likely should be Fiona, so let's check for Fiona real quick and see if the rest of their data is the same.
+
+``` {r Data Munging c2, echo=TRUE}
+
+df2016[grep("Fiona",df2016$Name),]
+
+```
+
+It does, so we can safely remove the improperly spelt name, which is observation 212. Let's title the new df "y2016".
+
+``` {r Data Munging d, echo=TRUE}
+
+y2016 <- df2016[-212,]
+
+```
+
+To check to see if we removed the right observation, let's look for the 3 y's again.
+
+``` {r Data Munging check, echo=TRUE}
+
+y2016[grep("yyy",y2016$Name),]
+
+```
+
+Good! It's gone.
+
+## 2 and 3
+
+Now that we know all the observations are correct, we'll want to merge the dataframes together. Let's first look at the data of 2015 a little bit and see if anything interesting pops up.
+
+```{r Data Merging b, echo=TRUE}
+
+tail(y2015,10)
+
+```
+
+Weird! All the names start with the letter Z.
+
+Since parents will likely only be looking for a boy name or a girl name, it's probably wise to split up the dataframes by gender. Then we can safely merge the years together, by gender, just in case their are names that are both and girls.
+
+```{r Data Merginge c, echo=TRUE}
+
+m2015 <- y2015[ y2015$Gender=="M", ]
+m2016 <- y2016[ y2016$Gender=="M", ]
+f2015 <- y2015[ y2015$Gender=="F", ]
+f2016 <- y2016[ y2016$Gender=="F", ]
+
+m <- merge( m2015, m2016, by="Name")
+f <- merge( f2015, f2016, by="Name")
+
+final <- rbind(m,f)
+
+head(m)
+```
+
+We are going to want to add another column with the total count, then remove one of the gender columns and both old count columns, and lastly, rename the columns.
+
+We are going to perform these tasks on both the males and females before merging the two, just in case we want to separate them out later.
+
+```{r Data Merging c2, echo=TRUE}
+
+m$Count <- m$Count.x + m$Count.y
+f$Count <- f$Count.x + f$Count.y
+
+mTotal <- m[,c(1,2,6)]
+fTotal <- f[,c(1,2,6)]
+
+colnames(mTotal) <- c("Name", "Gender", "Count")
+colnames(fTotal) <- c("Name", "Gender", "Count")
+
+total <- rbind(mTotal,fTotal)
+
+summary(total)
+str(total)
+```
+
+There were 26550 unique names in 2015 and 2016! Let's take a look at what were the most popular names in that time.
+
+``` {r Data Summary b, echo=TRUE}
+
+sorted <- total[ order( total$Count, decreasing=TRUE ), ]
+head(sorted, 10)
+
+```
+
+Our client just found out they're having a girl! So let's just give them the top 10 names of girl babies. If you want to write it to a CSV, uncomment the last line.
+
+``` {r Data Summary cd, echo=TRUE}
+
+girl <- head( fTotal[ order( fTotal$Count, decreasing=TRUE), ], 10)
+girl
+#write.csv( girl, file="itsagirl.csv" )
+
+```
