@@ -14,7 +14,7 @@ The 2016 file was separated by ";" whereas the 2015 file was separated by ",". F
 
 ```{r Data Munging a-b, echo=TRUE}
 
-setwd("/Users/michaerl/Downloads/HW_Unit5_2")
+setwd("/Users/michaerl/Documents/smuMSDS6306/HW5")
 df2016 <- read.table("yob2016.txt", sep=";", header=FALSE)
 y2015 <- read.table("yob2015.txt", sep=",", header=FALSE)
 colnames(df2016) <- c("Name","Gender","Count")
@@ -127,3 +127,5 @@ girl
 #write.csv( girl, file="itsagirl.csv" )
 
 ```
+
+My github with these files can be found at https://github.com/mlandrum22/smuMSDS6306.git

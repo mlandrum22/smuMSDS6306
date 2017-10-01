@@ -127,7 +127,7 @@ $(document).ready(function () {
 <h2>1</h2>
 <p>We were given 2 CSVs with columns of children’s first names, a gender, and the amount of children given that name. One CSV was from 2015 and the other was from 2016. We were told one of the names in 2016 was mispelled and thus created a duplicate.</p>
 <p>The 2016 file was separated by “;” whereas the 2015 file was separated by “,”. First, we’ll open up and display a little information about 2016.</p>
-<pre class="r"><code>setwd(&quot;/Users/michaerl/Downloads/HW_Unit5_2&quot;)
+<pre class="r"><code>setwd(&quot;/Users/michaerl/Documents/smuMSDS6306/HW5&quot;)
 df2016 &lt;- read.table(&quot;yob2016.txt&quot;, sep=&quot;;&quot;, header=FALSE)
 y2015 &lt;- read.table(&quot;yob2015.txt&quot;, sep=&quot;,&quot;, header=FALSE)
 colnames(df2016) &lt;- c(&quot;Name&quot;,&quot;Gender&quot;,&quot;Count&quot;)
@@ -255,6 +255,7 @@ girl</code></pre>
 ## 4879      Emily      F 22692
 ## 5826     Harper      F 21016</code></pre>
 <pre class="r"><code>#write.csv( girl, file=&quot;itsagirl.csv&quot; )</code></pre>
+<p>My github with these files can be found at <a href="https://github.com/mlandrum22/smuMSDS6306.git" class="uri">https://github.com/mlandrum22/smuMSDS6306.git</a></p>
 </div>
 
 
