@@ -6,4 +6,6 @@ Homework files from HW4 can be found in HW4.
 
 Homework files from HW5 can be found in HW5.
 
+SP500 file(s) can be found in Other.
+
 Eventually I'll probably make a HW folder, but for right now this works.
